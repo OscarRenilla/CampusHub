@@ -6,6 +6,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 /**
+ * @author Óscar Renilla
+ * @author Marcel Abad
+ * @author Álvaro Cotumba
+ * @version 1.0
+ */
+
+/**
  * Punto de entrada de la tarea. Sustituye cada stub por una implementación real. NO hay entidades,
  * repositorios ni documentos entregados.
  */
