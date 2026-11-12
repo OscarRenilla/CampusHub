@@ -7,9 +7,17 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Check;
 
+/**
+ * Actividad organizada por un docente. La regla "máximo de participantes > 0" se protege en la
+ * propia base de datos con un CHECK, no solo en la API.
+ */
 @Entity
-@Table(name = "actividades")
+@Table(
+    name = "actividades",
+    indexes = @Index(name = "idx_actividad_docente", columnList = "docente_id"))
+@Check(name = "ck_actividad_max_participantes", constraints = "max_participantes > 0")
 @Getter
 @Setter
 @NoArgsConstructor
