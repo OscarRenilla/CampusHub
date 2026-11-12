@@ -8,6 +8,7 @@ import es.academia.campushub.util.exception.BusinessConflictException;
 import es.academia.campushub.util.exception.InvalidInputException;
 import es.academia.campushub.util.exception.ResourceNotFoundException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -19,16 +20,22 @@ public class ActividadServiceImpl implements ActividadService {
   private final ActividadRepository actividades;
   private final EtiquetaRepository etiquetas;
   private final DocenteRepository docentes;
+  private final EstudianteRepository estudiantes;
+  private final InscripcionRepository inscripciones;
   private final ActividadMapper mapper;
 
   public ActividadServiceImpl(
       ActividadRepository actividades,
       EtiquetaRepository etiquetas,
       DocenteRepository docentes,
+      EstudianteRepository estudiantes,
+      InscripcionRepository inscripciones,
       ActividadMapper mapper) {
     this.actividades = actividades;
     this.etiquetas = etiquetas;
     this.docentes = docentes;
+    this.estudiantes = estudiantes;
+    this.inscripciones = inscripciones;
     this.mapper = mapper;
   }
 
@@ -67,6 +74,39 @@ public class ActividadServiceImpl implements ActividadService {
   @Transactional(readOnly = true)
   public ActividadResponse obtenerActividad(Long id) {
     return mapper.toResponse(actividad(id));
+  }
+
+  // ---------- Inscripciones (RF04) ----------
+
+  @Override
+  public InscripcionResponse inscribir(Long actividadId, CreateInscripcionRequest request) {
+    requireBody(request);
+    if (request.estudianteId() == null) {
+      throw new InvalidInputException("estudianteId es obligatorio");
+    }
+    // 1) Bloqueamos la fila de la actividad hasta que acabe la transacción. Si llegan dos
+    //    inscripciones a la vez, la segunda espera y ya ve la plaza ocupada por la primera.
+    Actividad actividad =
+        actividades
+            .findByIdParaActualizar(actividadId)
+            .orElseThrow(() -> new ResourceNotFoundException("Actividad no encontrada"));
+    Estudiante estudiante =
+        estudiantes
+            .findById(request.estudianteId())
+            .orElseThrow(() -> new ResourceNotFoundException("Estudiante no encontrado"));
+    // 2) No se permite inscribirse dos veces (además, la BD tiene UNIQUE como red de seguridad).
+    if (inscripciones.existsByActividadIdAndEstudianteId(actividadId, estudiante.getId())) {
+      throw new BusinessConflictException("El estudiante ya está inscrito en la actividad");
+    }
+    // 3) Aforo: no se admite una inscripción si ya se ocuparon todas las plazas.
+    if (inscripciones.countByActividadId(actividadId) >= actividad.getMaxParticipantes()) {
+      throw new BusinessConflictException("La actividad no tiene plazas disponibles");
+    }
+    Inscripcion inscripcion = new Inscripcion();
+    inscripcion.setActividad(actividad);
+    inscripcion.setEstudiante(estudiante);
+    inscripcion.setFechaInscripcion(LocalDateTime.now());
+    return mapper.toResponse(inscripciones.saveAndFlush(inscripcion));
   }
 
   // ---------- Etiquetas (RF10) ----------

@@ -12,6 +12,8 @@ public interface ActividadService {
 
   ActividadResponse obtenerActividad(Long id);
 
+  InscripcionResponse inscribir(Long actividadId, CreateInscripcionRequest request);
+
   EtiquetaResponse crearEtiqueta(CreateEtiquetaRequest request);
 
   void asociarEtiqueta(Long actividadId, Long etiquetaId);
