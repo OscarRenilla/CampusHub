@@ -8,6 +8,10 @@ import java.util.List;
  * CampusHubService.
  */
 public interface ActividadService {
+  ActividadResponse crearActividad(CreateActividadRequest request);
+
+  ActividadResponse obtenerActividad(Long id);
+
   EtiquetaResponse crearEtiqueta(CreateEtiquetaRequest request);
 
   void asociarEtiqueta(Long actividadId, Long etiquetaId);

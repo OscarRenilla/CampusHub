@@ -7,6 +7,8 @@ import es.academia.campushub.repository.*;
 import es.academia.campushub.util.exception.BusinessConflictException;
 import es.academia.campushub.util.exception.InvalidInputException;
 import es.academia.campushub.util.exception.ResourceNotFoundException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,13 +18,55 @@ import org.springframework.transaction.annotation.Transactional;
 public class ActividadServiceImpl implements ActividadService {
   private final ActividadRepository actividades;
   private final EtiquetaRepository etiquetas;
+  private final DocenteRepository docentes;
   private final ActividadMapper mapper;
 
   public ActividadServiceImpl(
-      ActividadRepository actividades, EtiquetaRepository etiquetas, ActividadMapper mapper) {
+      ActividadRepository actividades,
+      EtiquetaRepository etiquetas,
+      DocenteRepository docentes,
+      ActividadMapper mapper) {
     this.actividades = actividades;
     this.etiquetas = etiquetas;
+    this.docentes = docentes;
     this.mapper = mapper;
+  }
+
+  // ---------- Actividades (RF03) ----------
+
+  @Override
+  public ActividadResponse crearActividad(CreateActividadRequest request) {
+    requireBody(request);
+    String titulo = texto(request.titulo(), "titulo", 200);
+    String descripcion = texto(request.descripcion(), "descripcion", Integer.MAX_VALUE);
+    String tipo = texto(request.tipo(), "tipo", 50);
+    LocalDate fechaPrevista = fecha(request.fechaPrevista(), "fechaPrevista");
+    Integer max = request.maxParticipantes();
+    if (max == null || max <= 0) {
+      throw new InvalidInputException("maxParticipantes debe ser mayor que cero");
+    }
+    if (request.docenteId() == null) {
+      throw new InvalidInputException("docenteId es obligatorio");
+    }
+    // El DTO trae docenteId; la entidad guarda el Docente completo. Si no existe, 404.
+    Docente docente =
+        docentes
+            .findById(request.docenteId())
+            .orElseThrow(() -> new ResourceNotFoundException("Docente no encontrado"));
+    Actividad a = new Actividad();
+    a.setTitulo(titulo);
+    a.setDescripcion(descripcion);
+    a.setTipo(tipo);
+    a.setFechaPrevista(fechaPrevista);
+    a.setMaxParticipantes(max);
+    a.setDocente(docente);
+    return mapper.toResponse(actividades.saveAndFlush(a));
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public ActividadResponse obtenerActividad(Long id) {
+    return mapper.toResponse(actividad(id));
   }
 
   // ---------- Etiquetas (RF10) ----------
@@ -87,5 +131,16 @@ public class ActividadServiceImpl implements ActividadService {
       throw new InvalidInputException(campo + " supera " + max + " caracteres");
     }
     return limpio;
+  }
+
+  private static LocalDate fecha(String valor, String campo) {
+    if (valor == null || valor.isBlank()) {
+      throw new InvalidInputException(campo + " es obligatorio");
+    }
+    try {
+      return LocalDate.parse(valor.trim());
+    } catch (DateTimeParseException ex) {
+      throw new InvalidInputException(campo + " debe tener formato YYYY-MM-DD");
+    }
   }
 }
