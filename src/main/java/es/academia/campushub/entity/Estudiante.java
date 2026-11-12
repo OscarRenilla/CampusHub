@@ -2,6 +2,8 @@ package es.academia.campushub.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,10 +39,7 @@ public class Estudiante {
   @OneToOne(mappedBy = "estudiante", fetch = FetchType.LAZY)
   private ContactoEstudiante contacto;
 
-  // INTEGRACION CON PERSONA B (Marcel): descomentar cuando exista la entidad Inscripcion
-  // (su campo "estudiante" es el lado propietario). Es el lado inverso acordado en
-  // docs/Acuerdo_entidades.md. Hay que importar java.util.ArrayList y java.util.List.
-  //
-  // @OneToMany(mappedBy = "estudiante")
-  // private List<Inscripcion> inscripciones = new ArrayList<>();
+  /** Lado inverso de Inscripcion.estudiante (el propietario es Inscripcion). */
+  @OneToMany(mappedBy = "estudiante")
+  private List<Inscripcion> inscripciones = new ArrayList<>();
 }

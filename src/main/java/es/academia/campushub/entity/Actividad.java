@@ -2,7 +2,9 @@ package es.academia.campushub.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -55,4 +57,8 @@ public class Actividad {
               name = "uk_actividad_etiqueta",
               columnNames = {"actividad_id", "etiqueta_id"}))
   private Set<Etiqueta> etiquetas = new HashSet<>();
+
+  /** Lado inverso de Inscripcion.actividad (el propietario es Inscripcion). */
+  @OneToMany(mappedBy = "actividad")
+  private List<Inscripcion> inscripciones = new ArrayList<>();
 }
