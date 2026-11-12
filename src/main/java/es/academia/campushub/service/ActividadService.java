@@ -14,6 +14,10 @@ public interface ActividadService {
 
   InscripcionResponse inscribir(Long actividadId, CreateInscripcionRequest request);
 
+  List<EstudianteResponse> participantes(Long actividadId);
+
+  List<ActividadHistorialResponse> historial(Long estudianteId);
+
   EtiquetaResponse crearEtiqueta(CreateEtiquetaRequest request);
 
   void asociarEtiqueta(Long actividadId, Long etiquetaId);

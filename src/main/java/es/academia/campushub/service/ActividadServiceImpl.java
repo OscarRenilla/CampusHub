@@ -109,6 +109,30 @@ public class ActividadServiceImpl implements ActividadService {
     return mapper.toResponse(inscripciones.saveAndFlush(inscripcion));
   }
 
+  @Override
+  @Transactional(readOnly = true)
+  public List<EstudianteResponse> participantes(Long actividadId) {
+    if (!actividades.existsById(actividadId)) {
+      throw new ResourceNotFoundException("Actividad no encontrada");
+    }
+    return inscripciones.findByActividadIdConEstudiante(actividadId).stream()
+        .map(mapper::toEstudiante)
+        .toList();
+  }
+
+  // ---------- Historial del estudiante (RF08) ----------
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<ActividadHistorialResponse> historial(Long estudianteId) {
+    if (!estudiantes.existsById(estudianteId)) {
+      throw new ResourceNotFoundException("Estudiante no encontrado");
+    }
+    return inscripciones.findHistorialByEstudianteId(estudianteId).stream()
+        .map(mapper::toHistorial)
+        .toList();
+  }
+
   // ---------- Etiquetas (RF10) ----------
 
   @Override
