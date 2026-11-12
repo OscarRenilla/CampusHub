@@ -13,13 +13,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Etiqueta {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false, unique = true, length = 80)
-    private String nombre;
+  @Column(nullable = false, unique = true, length = 80)
+  private String nombre;
 
-    @ManyToMany(mappedBy = "etiquetas")
-    private Set<Actividad> actividades = new HashSet<>();
+  @ManyToMany(mappedBy = "etiquetas")
+  private Set<Actividad> actividades = new HashSet<>();
 }
