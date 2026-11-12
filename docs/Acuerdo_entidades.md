@@ -59,3 +59,8 @@ Todos extienden `JpaRepository<Entidad, Long>` y se ubican en `es.academia.campu
 ## Correspondencia con el contrato HTTP
 
 Los nombres anteriores son internos. Se mantienen sin cambios los DTO actuales: `CreateDocenteRequest.departamentoId`, `CreateGrupoRequest.tutorDocenteId`, `CreateEstudianteRequest.grupoId`, `CreateActividadRequest.docenteId` y `CreateInscripcionRequest.estudianteId`. Los mappers/servicios resolverán esos identificadores a sus entidades correspondientes.
+---
+
+Persona A: Álvaro
+Persona B: Marcel
+Persona C: Óscar 
