@@ -6,12 +6,7 @@ import java.util.List;
 
 public interface SeguimientoService {
 
-    SeguimientoResponse registrarSeguimiento(
-            Long actividadId,
-            CreateSeguimientoRequest request
-    );
+  SeguimientoResponse registrarSeguimiento(Long actividadId, CreateSeguimientoRequest request);
 
-    List<SeguimientoResponse> obtenerSeguimientos(
-            Long actividadId
-    );
+  List<SeguimientoResponse> obtenerSeguimientos(Long actividadId);
 }
