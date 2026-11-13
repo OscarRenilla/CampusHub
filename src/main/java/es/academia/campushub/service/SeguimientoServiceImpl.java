@@ -12,16 +12,26 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
+// Import temporal para pruebas:
+import org.springframework.data.mongodb.core.MongoTemplate;
+
 @Service
 public class SeguimientoServiceImpl implements SeguimientoService {
 
   private final SeguimientoRepository seguimientoRepository;
   private final ActividadRepository actividadRepository;
 
+  // Dependencia temporal
+  private final MongoTemplate mongoTemplate;
+
   public SeguimientoServiceImpl(
-      SeguimientoRepository seguimientoRepository, ActividadRepository actividadRepository) {
+          SeguimientoRepository seguimientoRepository,
+          ActividadRepository actividadRepository,
+          MongoTemplate mongoTemplate) {
+
     this.seguimientoRepository = seguimientoRepository;
     this.actividadRepository = actividadRepository;
+    this.mongoTemplate = mongoTemplate;
   }
 
   @Override
@@ -53,8 +63,20 @@ public class SeguimientoServiceImpl implements SeguimientoService {
     seguimiento.setDatos(new LinkedHashMap<>(request.datos()));
     seguimiento.setCreadoEn(LocalDateTime.now());
 
+    // Código temporal para comporbaciones
+    System.out.println(">>> EJECUTANDO GUARDADO EN MONGODB <<<");
+    System.out.println(">>> BASE DE DATOS MONGO: " +
+            mongoTemplate.getDb().getName());
+    System.out.println(">>> COLECCIONES MONGO: " +
+            mongoTemplate.getCollectionNames());
+
     // 4. Guardar el documento en MongoDB
     Seguimiento guardado = seguimientoRepository.save(seguimiento);
+
+    // Fragmento de código temporal para comporbaciones
+    System.out.println(">>> ID GUARDADO EN MONGO: " + guardado.getId());
+    System.out.println(">>> DOCUMENTO RECUPERADO: " +
+            seguimientoRepository.findById(guardado.getId()).orElse(null));
 
     // 5. Convertir el documento en respuesta DTO
     return convertirAResponse(guardado);
