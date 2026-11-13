@@ -2,9 +2,7 @@ package es.academia.campushub.service;
 
 import es.academia.campushub.controller.dto.*;
 import es.academia.campushub.util.exception.PersistenciaPendienteException;
-
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,9 +19,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class CampusHubServiceImpl implements CampusHubService {
   private final SeguimientoService seguimientoService;
+  private final ActividadDetalleService actividadDetalleService;
 
-  public CampusHubServiceImpl(SeguimientoService seguimientoService) {
+  public CampusHubServiceImpl(
+      SeguimientoService seguimientoService, ActividadDetalleService actividadDetalleService) {
     this.seguimientoService = seguimientoService;
+    this.actividadDetalleService = actividadDetalleService;
   }
 
   @Override
@@ -72,20 +73,20 @@ public class CampusHubServiceImpl implements CampusHubService {
   }
 
   //  @Override
-//  public SeguimientoResponse registrarSeguimiento(
-//      Long actividadId, CreateSeguimientoRequest request) {
-//    throw new PersistenciaPendienteException("registrarSeguimiento");
-//  }
+  //  public SeguimientoResponse registrarSeguimiento(
+  //      Long actividadId, CreateSeguimientoRequest request) {
+  //    throw new PersistenciaPendienteException("registrarSeguimiento");
+  //  }
 
   @Override
   public SeguimientoResponse registrarSeguimiento(
-          Long actividadId, CreateSeguimientoRequest request) {
+      Long actividadId, CreateSeguimientoRequest request) {
     return seguimientoService.registrarSeguimiento(actividadId, request);
   }
 
   @Override
   public ActividadDetalleResponse detalle(Long id) {
-    throw new PersistenciaPendienteException("detalle");
+    return actividadDetalleService.detalle(id);
   }
 
   @Override
