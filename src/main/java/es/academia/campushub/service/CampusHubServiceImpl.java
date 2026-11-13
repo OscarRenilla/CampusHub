@@ -2,7 +2,9 @@ package es.academia.campushub.service;
 
 import es.academia.campushub.controller.dto.*;
 import es.academia.campushub.util.exception.PersistenciaPendienteException;
+
 import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,6 +20,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CampusHubServiceImpl implements CampusHubService {
+  private final SeguimientoService seguimientoService;
+
+  public CampusHubServiceImpl(SeguimientoService seguimientoService) {
+    this.seguimientoService = seguimientoService;
+  }
+
   @Override
   public GrupoResponse crearGrupo(CreateGrupoRequest request) {
     throw new PersistenciaPendienteException("crearGrupo");
@@ -63,10 +71,16 @@ public class CampusHubServiceImpl implements CampusHubService {
     throw new PersistenciaPendienteException("participantes");
   }
 
+  //  @Override
+//  public SeguimientoResponse registrarSeguimiento(
+//      Long actividadId, CreateSeguimientoRequest request) {
+//    throw new PersistenciaPendienteException("registrarSeguimiento");
+//  }
+
   @Override
   public SeguimientoResponse registrarSeguimiento(
-      Long actividadId, CreateSeguimientoRequest request) {
-    throw new PersistenciaPendienteException("registrarSeguimiento");
+          Long actividadId, CreateSeguimientoRequest request) {
+    return seguimientoService.registrarSeguimiento(actividadId, request);
   }
 
   @Override
