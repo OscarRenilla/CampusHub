@@ -5,7 +5,7 @@ services:
       POSTGRES_DB: campushub
       POSTGRES_USER: campushub
       POSTGRES_PASSWORD: campushub
-    ports: [ "5432:5433" ]
+    ports: [ "5433:5432" ]
     volumes: [ "postgres_data:/var/lib/postgresql/data" ]
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U campushub" ]
