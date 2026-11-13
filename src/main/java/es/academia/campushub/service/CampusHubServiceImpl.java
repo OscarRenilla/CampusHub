@@ -18,15 +18,21 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CampusHubServiceImpl implements CampusHubService {
+  private final OrganizacionService organizacionService;
+  private final ActividadService actividadService;
   private final SeguimientoService seguimientoService;
   private final ActividadDetalleService actividadDetalleService;
 
   public CampusHubServiceImpl(
-      SeguimientoService seguimientoService, ActividadDetalleService actividadDetalleService) {
+          OrganizacionService organizacionService,
+          ActividadService actividadService,
+          SeguimientoService seguimientoService,
+          ActividadDetalleService actividadDetalleService) {
+    this.organizacionService = organizacionService;
+    this.actividadService = actividadService;
     this.seguimientoService = seguimientoService;
     this.actividadDetalleService = actividadDetalleService;
   }
-
   @Override
   public GrupoResponse crearGrupo(CreateGrupoRequest request) {
     throw new PersistenciaPendienteException("crearGrupo");
