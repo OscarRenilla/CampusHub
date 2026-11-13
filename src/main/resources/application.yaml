@@ -2,7 +2,7 @@ spring:
   application:
     name: campushub
   datasource:
-    url: ${JDBC_URL:jdbc:postgresql://localhost:5432/campushub}
+    url: ${JDBC_URL:jdbc:postgresql://localhost:5433/campushub}
     username: ${JDBC_USER:campushub}
     password: ${JDBC_PASSWORD:campushub}
   jpa:
