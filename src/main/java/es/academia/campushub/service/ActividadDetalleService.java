@@ -4,5 +4,5 @@ import es.academia.campushub.controller.dto.ActividadDetalleResponse;
 
 public interface ActividadDetalleService {
 
-    ActividadDetalleResponse detalle(Long id);
+  ActividadDetalleResponse detalle(Long id);
 }
