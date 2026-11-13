@@ -1,7 +1,6 @@
 package es.academia.campushub.service;
 
 import es.academia.campushub.controller.dto.*;
-import es.academia.campushub.util.exception.PersistenciaPendienteException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -24,58 +23,59 @@ public class CampusHubServiceImpl implements CampusHubService {
   private final ActividadDetalleService actividadDetalleService;
 
   public CampusHubServiceImpl(
-          OrganizacionService organizacionService,
-          ActividadService actividadService,
-          SeguimientoService seguimientoService,
-          ActividadDetalleService actividadDetalleService) {
+      OrganizacionService organizacionService,
+      ActividadService actividadService,
+      SeguimientoService seguimientoService,
+      ActividadDetalleService actividadDetalleService) {
     this.organizacionService = organizacionService;
     this.actividadService = actividadService;
     this.seguimientoService = seguimientoService;
     this.actividadDetalleService = actividadDetalleService;
   }
+
   @Override
   public GrupoResponse crearGrupo(CreateGrupoRequest request) {
-    throw new PersistenciaPendienteException("crearGrupo");
+    return organizacionService.crearGrupo(request);
   }
 
   @Override
   public DepartamentoResponse crearDepartamento(CreateDepartamentoRequest request) {
-    throw new PersistenciaPendienteException("crearDepartamento");
+    return organizacionService.crearDepartamento(request);
   }
 
   @Override
   public EstudianteResponse crearEstudiante(CreateEstudianteRequest request) {
-    throw new PersistenciaPendienteException("crearEstudiante");
+    return organizacionService.crearEstudiante(request);
   }
 
   @Override
   public EstudianteResponse obtenerEstudiante(Long id) {
-    throw new PersistenciaPendienteException("obtenerEstudiante");
+    return organizacionService.obtenerEstudiante(id);
   }
 
   @Override
   public DocenteResponse crearDocente(CreateDocenteRequest request) {
-    throw new PersistenciaPendienteException("crearDocente");
+    return organizacionService.crearDocente(request);
   }
 
   @Override
   public ActividadResponse crearActividad(CreateActividadRequest request) {
-    throw new PersistenciaPendienteException("crearActividad");
+    return actividadService.crearActividad(request);
   }
 
   @Override
   public ActividadResponse obtenerActividad(Long id) {
-    throw new PersistenciaPendienteException("obtenerActividad");
+    return actividadService.obtenerActividad(id);
   }
 
   @Override
   public InscripcionResponse inscribir(Long actividadId, CreateInscripcionRequest request) {
-    throw new PersistenciaPendienteException("inscribir");
+    return actividadService.inscribir(actividadId, request);
   }
 
   @Override
   public List<EstudianteResponse> participantes(Long actividadId) {
-    throw new PersistenciaPendienteException("participantes");
+    return actividadService.participantes(actividadId);
   }
 
   //  @Override
@@ -97,31 +97,31 @@ public class CampusHubServiceImpl implements CampusHubService {
 
   @Override
   public List<ActividadHistorialResponse> historial(Long estudianteId) {
-    throw new PersistenciaPendienteException("historial");
+    return actividadService.historial(estudianteId);
   }
 
   @Override
   public ContactoResponse guardarContacto(Long estudianteId, UpsertContactoRequest request) {
-    throw new PersistenciaPendienteException("guardarContacto");
+    return organizacionService.guardarContacto(estudianteId, request);
   }
 
   @Override
   public ContactoResponse contacto(Long estudianteId) {
-    throw new PersistenciaPendienteException("contacto");
+    return organizacionService.contacto(estudianteId);
   }
 
   @Override
   public EtiquetaResponse crearEtiqueta(CreateEtiquetaRequest request) {
-    throw new PersistenciaPendienteException("crearEtiqueta");
+    return actividadService.crearEtiqueta(request);
   }
 
   @Override
   public void asociarEtiqueta(Long actividadId, Long etiquetaId) {
-    throw new PersistenciaPendienteException("asociarEtiqueta");
+    actividadService.asociarEtiqueta(actividadId, etiquetaId);
   }
 
   @Override
   public List<ActividadResponse> actividadesPorEtiqueta(Long etiquetaId) {
-    throw new PersistenciaPendienteException("actividadesPorEtiqueta");
+    return actividadService.actividadesPorEtiqueta(etiquetaId);
   }
 }
