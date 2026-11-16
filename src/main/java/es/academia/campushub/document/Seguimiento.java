@@ -2,8 +2,22 @@ package es.academia.campushub.document;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+/**
+ * @author Óscar Renilla
+ * @version 1.0
+ */
+
+/**
+ * Representa un seguimiento de una actividad almacenado en MongoDB.
+ * <p>
+ * Cada documento contiene el identificador de la actividad relacionada, el tipo de seguimiento, sus datos y la fecha de creación.
+ * <p>
+ * La actividad se identifica mediante su ID de PostgreSQL, sin necesidad de almacenar toda la entidad Actividad en MongoDB.
+ */
 
 /**
  * Seguimiento de una actividad almacenado en MongoDB.
@@ -14,64 +28,91 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "seguimientos")
 public class Seguimiento {
 
-  @Id private String id;
+    // Identificador único de la actividad generado por MongoDB
+    @Id
+    private String id;
 
-  private Long actividadId;
+    // Identificador de la actividad de PostgreSQL a la que pertenece el seguimiento.
+    private Long actividadId;
 
-  private String tipo;
+    // Tipo de seguimiento que se está registrando.
+    private String tipo;
 
-  private Map<String, Object> datos;
+    // Datos adicionales del seguimiento almacenados en formato clave-valor.
+    // Se utiliza Object para permitir diferentes tipos de datos.
+    private Map<String, Object> datos;
 
-  private LocalDateTime creadoEn;
+    // Fecha y hora en la que se creó el seguimiento.
+    private LocalDateTime creadoEn;
 
-  public Seguimiento() {}
+    // Constructor vacío necesario para que Spring Data MongoDB pueda crear instancias de esta clase.
+    public Seguimiento() {
+    }
 
-  public Seguimiento(
-      String id, Long actividadId, String tipo, Map<String, Object> datos, LocalDateTime creadoEn) {
-    this.id = id;
-    this.actividadId = actividadId;
-    this.tipo = tipo;
-    this.datos = datos;
-    this.creadoEn = creadoEn;
-  }
+    /**
+     * Constructor que permite inicializar todos los atributos del seguimiento.
+     * @param id identificador del documento
+     * @param actividadId identificador de la actividad relacionada
+     * @param tipo tipo de seguimiento
+     * @param datos informacion adicional del seguimiento
+     * @param creadoEn fecha y hora de creación
+     */
+    public Seguimiento(
+            String id, Long actividadId, String tipo, Map<String, Object> datos, LocalDateTime creadoEn) {
+        this.id = id;
+        this.actividadId = actividadId;
+        this.tipo = tipo;
+        this.datos = datos;
+        this.creadoEn = creadoEn;
+    }
 
-  public String getId() {
-    return id;
-  }
+    // Devuelve el identificador del seguimiento.
+    public String getId() {
+        return id;
+    }
 
-  public void setId(String id) {
-    this.id = id;
-  }
+    // Modifica el identificador del seguimiento.
+    public void setId(String id) {
+        this.id = id;
+    }
 
-  public Long getActividadId() {
-    return actividadId;
-  }
+    // Devuelve el identificador de la actividad relacionada.
+    public Long getActividadId() {
+        return actividadId;
+    }
 
-  public void setActividadId(Long actividadId) {
-    this.actividadId = actividadId;
-  }
+    // Establece la actividad a la que pertenece el seguimiento.
+    public void setActividadId(Long actividadId) {
+        this.actividadId = actividadId;
+    }
 
-  public String getTipo() {
-    return tipo;
-  }
+    // Devuelve el tipo de seguimiento.
+    public String getTipo() {
+        return tipo;
+    }
 
-  public void setTipo(String tipo) {
-    this.tipo = tipo;
-  }
+    // Modifica el tipo de seguimiento.
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
-  public Map<String, Object> getDatos() {
-    return datos;
-  }
+    // Devuelve los datos adicionales del seguimiento.
+    public Map<String, Object> getDatos() {
+        return datos;
+    }
 
-  public void setDatos(Map<String, Object> datos) {
-    this.datos = datos;
-  }
+    // Establece los datos adicionales del seguimiento.
+    public void setDatos(Map<String, Object> datos) {
+        this.datos = datos;
+    }
 
-  public LocalDateTime getCreadoEn() {
-    return creadoEn;
-  }
+    // Devuelve la fecha y hora de creación.
+    public LocalDateTime getCreadoEn() {
+        return creadoEn;
+    }
 
-  public void setCreadoEn(LocalDateTime creadoEn) {
-    this.creadoEn = creadoEn;
-  }
+    // Establece la fecha y hora de creación.
+    public void setCreadoEn(LocalDateTime creadoEn) {
+        this.creadoEn = creadoEn;
+    }
 }
