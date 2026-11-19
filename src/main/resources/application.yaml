@@ -1,22 +1,31 @@
 # Configuración general de la app Spring Boot
 spring:
   application:
+    # Nombre lógico de la aplicación.
     name: campushub
   datasource:
+    # Conexión a PostgreSQL; usa la variable JDBC_URL o, si no existe, el valor por defecto (localhost:5433).
     url: ${JDBC_URL:jdbc:postgresql://localhost:5433/campushub}
+    # Usuario de la base de datos (variable JDBC_USER o "campushub").
     username: ${JDBC_USER:campushub}
+    # Contraseña de la base de datos (variable JDBC_PASSWORD o "campushub").
     password: ${JDBC_PASSWORD:campushub}
   jpa:
+    # Desactiva Open Session In View: las consultas LAZY deben hacerse dentro de transacciones del servicio.
     open-in-view: false
     hibernate:
+      # Hibernate crea o modifica las tablas automáticamente según las entidades.
       ddl-auto: update # Solo para la practica: en produccion usar migraciones
   mongodb:
+    # Conexión a MongoDB (variable MONGODB_URI o localhost:27017); aquí se guardan los seguimientos.
     uri: ${MONGODB_URI:mongodb://localhost:27017/campushub}
   data:
     redis:
+      # Servidor Redis (host y puerto configurables por variables de entorno).
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
 server:
+  # Puerto HTTP de la API (variable PORT o 8080 por defecto).
   port: ${PORT:8080}
 
 # Acceder a Web - http://localhost:8080/swagger-ui/index.html

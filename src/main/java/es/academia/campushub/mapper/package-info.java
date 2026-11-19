@@ -1,7 +1,7 @@
 /**
  * Conversores entre entidades o documentos y DTO.
  *
- * <p>Pueden implementarse manualmente o mediante MapStruct, cuya dependencia y procesador ya están
- * configurados en Maven.
+ * <p>Se implementan manualmente (ActividadMapper y OrganizacionMapper). Dentro de una transacción
+ * porque las relaciones de las entidades son LAZY.
  */
 package es.academia.campushub.mapper;

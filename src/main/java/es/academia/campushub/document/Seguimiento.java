@@ -1,34 +1,32 @@
+// Paquete de los documentos de MongoDB.
 package es.academia.campushub.document;
 
+// Tipo de fecha con hora para el momento de creación.
 import java.time.LocalDateTime;
+// Mapa clave-valor para los datos de estructura libre.
 import java.util.Map;
 
+// Marca el campo que actúa como identificador del documento.
 import org.springframework.data.annotation.Id;
+// Indica que la clase se guarda como documento en una colección de MongoDB.
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
+ * Seguimiento de una actividad almacenado en MongoDB.
+ * <p>
+ * Cada documento contiene el identificador de la actividad relacionada, el tipo de seguimiento,
+ * sus datos y la fecha de creación. La actividad se referencia mediante su ID de PostgreSQL, sin
+ * necesidad de almacenar toda la entidad Actividad en MongoDB. El campo datos conserva una
+ * estructura flexible de mapas, listas y valores JSON.
+ *
  * @author Óscar Renilla
  * @version 1.0
  */
-
-/**
- * Representa un seguimiento de una actividad almacenado en MongoDB.
- * <p>
- * Cada documento contiene el identificador de la actividad relacionada, el tipo de seguimiento, sus datos y la fecha de creación.
- * <p>
- * La actividad se identifica mediante su ID de PostgreSQL, sin necesidad de almacenar toda la entidad Actividad en MongoDB.
- */
-
-/**
- * Seguimiento de una actividad almacenado en MongoDB.
- *
- * <p>La actividad se referencia mediante su identificador de PostgreSQL. El campo {@code datos}
- * conserva una estructura flexible de mapas, listas y valores JSON.
- */
+// Los objetos de esta clase se guardan en la colección seguimientos de MongoDB.
 @Document(collection = "seguimientos")
 public class Seguimiento {
 
-    // Identificador único de la actividad generado por MongoDB
+    // Identificador único del documento, generado por MongoDB (cadena hexadecimal).
     @Id
     private String id;
 
@@ -38,8 +36,8 @@ public class Seguimiento {
     // Tipo de seguimiento que se está registrando.
     private String tipo;
 
-    // Datos adicionales del seguimiento almacenados en formato clave-valor.
-    // Se utiliza Object para permitir diferentes tipos de datos.
+    // Datos adicionales del seguimiento en formato clave-valor.
+    // Se utiliza Object para permitir diferentes tipos de datos (textos, números, listas, mapas...).
     private Map<String, Object> datos;
 
     // Fecha y hora en la que se creó el seguimiento.
@@ -54,15 +52,20 @@ public class Seguimiento {
      * @param id identificador del documento
      * @param actividadId identificador de la actividad relacionada
      * @param tipo tipo de seguimiento
-     * @param datos informacion adicional del seguimiento
+     * @param datos información adicional del seguimiento
      * @param creadoEn fecha y hora de creación
      */
     public Seguimiento(
             String id, Long actividadId, String tipo, Map<String, Object> datos, LocalDateTime creadoEn) {
+        // Guarda el id recibido en el atributo de la clase.
         this.id = id;
+        // Guarda la actividad relacionada.
         this.actividadId = actividadId;
+        // Guarda el tipo de seguimiento.
         this.tipo = tipo;
+        // Guarda los datos adicionales.
         this.datos = datos;
+        // Guarda la fecha de creación.
         this.creadoEn = creadoEn;
     }
 

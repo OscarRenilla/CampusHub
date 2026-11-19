@@ -1,38 +1,46 @@
+// Paquete de la capa de servicios (lógica de negocio).
 package es.academia.campushub.service;
 
+// DTO de salida y los DTO que lo componen.
 import es.academia.campushub.controller.dto.ActividadDetalleResponse;
 import es.academia.campushub.controller.dto.ActividadResponse;
 import es.academia.campushub.controller.dto.DocenteResponse;
 import es.academia.campushub.controller.dto.EstudianteResponse;
 import es.academia.campushub.controller.dto.EtiquetaResponse;
 import es.academia.campushub.controller.dto.SeguimientoResponse;
+// Entidad principal consultada.
 import es.academia.campushub.entity.Actividad;
+// Mapper de entidad a DTO.
 import es.academia.campushub.mapper.ActividadMapper;
+// Repositorios de PostgreSQL.
 import es.academia.campushub.repository.ActividadRepository;
 import es.academia.campushub.repository.InscripcionRepository;
+// Excepciones propias que se traducen a códigos HTTP.
 import es.academia.campushub.util.exception.InvalidInputException;
 import es.academia.campushub.util.exception.ResourceNotFoundException;
 
+// Interfaz de lista.
 import java.util.List;
 
+// Marca la clase como servicio de Spring.
 import org.springframework.stereotype.Service;
+// Gestión de transacciones.
 import org.springframework.transaction.annotation.Transactional;
-
-/**
- * @author Óscar Renilla
- * @version 1.0
- */
 
 /**
  * Implementación del servicio encargado de obtener el detalle completo de una actividad.
  * <p>
- * Combina información procedente de PostgreSQL y MongoDB para construir
- * una respuesta con los datos de la actividad, el docente responsable,
- * las plazas, los estudiantes inscritos, las etiquetas y los seguimientos.
+ * Combina información procedente de PostgreSQL y MongoDB para construir una respuesta con los
+ * datos de la actividad, el docente responsable, las plazas, los estudiantes inscritos, las
+ * etiquetas y los seguimientos.
+ *
+ * @author Óscar Renilla
+ * @version 1.0
  */
+// Servicio de Spring.
 @Service
 // Todas las operaciones de esta clase se ejecutan en modo solo lectura,
-// ya que su funcion es consultar informacion y no modificarla.
+// ya que su función es consultar información y no modificarla.
 @Transactional(readOnly = true)
 public class ActividadDetalleServiceImpl implements ActividadDetalleService {
 
@@ -63,6 +71,7 @@ public class ActividadDetalleServiceImpl implements ActividadDetalleService {
             InscripcionRepository inscripcionRepository,
             SeguimientoService seguimientoService,
             ActividadMapper actividadMapper) {
+        // Guarda cada dependencia recibida en su atributo.
         this.actividadRepository = actividadRepository;
         this.inscripcionRepository = inscripcionRepository;
         this.seguimientoService = seguimientoService;
@@ -72,8 +81,8 @@ public class ActividadDetalleServiceImpl implements ActividadDetalleService {
     /**
      * Obtiene toda la información relacionada con una actividad.
      * <p>
-     * Comprueba que el identificador sea válido y que la actividad exista.
-     * Después recupera sus datos relacionados y construye un DTO con toda la información necesaria.
+     * Comprueba que el identificador sea válido y que la actividad exista. Después recupera sus
+     * datos relacionados y construye un DTO con toda la información necesaria.
      *
      * @param id identificador de la actividad
      * @return detalle completo de la actividad
@@ -81,14 +90,14 @@ public class ActividadDetalleServiceImpl implements ActividadDetalleService {
     @Override
     public ActividadDetalleResponse detalle(Long id) {
 
-        // Comprobar que el identificador recibido sea válido
+        // Comprobar que el identificador recibido sea válido.
         if (id == null || id <= 0) {
             throw new InvalidInputException("El identificador de actividad no es válido");
         }
 
         // 1. Consultar la actividad en PostgreSQL.
         // Si no existe, se lanza una excepción de recurso no encontrado (404).
-         Actividad actividad =
+        Actividad actividad =
                 actividadRepository
                         .findById(id)
                         .orElseThrow(
@@ -128,7 +137,7 @@ public class ActividadDetalleServiceImpl implements ActividadDetalleService {
         }
 
         // 7. Construir y devolver el DTO con toda la información recopilada.
-         return new ActividadDetalleResponse(
+        return new ActividadDetalleResponse(
                 actividadResponse,
                 responsableResponse,
                 plazasOcupadas,

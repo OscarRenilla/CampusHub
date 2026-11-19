@@ -1,53 +1,44 @@
+// Paquete de la capa de servicios (lógica de negocio).
 package es.academia.campushub.service;
 
+// Importa todos los DTO de petición y respuesta.
 import es.academia.campushub.controller.dto.*;
 
+// Interfaz de lista.
 import java.util.List;
 
+// Marca la clase como servicio gestionado por Spring.
 import org.springframework.stereotype.Service;
 
 /**
+ * Implementación principal del servicio de CampusHub.
+ * <p>
+ * Actúa como punto de entrada para las operaciones de la aplicación, delegando cada tarea en el
+ * servicio especializado correspondiente. Centraliza el acceso a los servicios de organización
+ * (Álvaro Cotumba), actividades (Marcel Abad), seguimientos y detalles de actividades (Óscar Renilla).
+ *
  * @author Óscar Renilla
  * @author Marcel Abad
  * @author Álvaro Cotumba
  * @version 1.0
  */
-
-/**
- * Punto de entrada de la tarea. Sustituye cada stub por una implementación real. NO hay entidades,
- * repositorios ni documentos entregados.
- */
-
-/**
- * Implementación principal del servicio de CampusHub.
- * <p>
- * Actúa como punto de entrada para las operaciones de la aplicación,
- * delegando cada tarea en el servicio especializado correspondiente.
- * <p>
- * Centraliza el acceso a los servicios de organización, actividades,
- * seguimientos y detalles de actividades.
- */
 @Service
 public class CampusHubServiceImpl implements CampusHubService {
 
-    // Servicio encargado de gestionar grupos, departamentos,
-    // estudiantes, docentes y contactos.
+    // Servicio de grupos, departamentos, estudiantes, docentes y contactos. @author Álvaro Cotumba
     private final OrganizacionService organizacionService;
 
-    // Servicio encargado de gestionar actividades, inscripciones,
-    // participantes, historiales y etiquetas.
+    // Servicio de actividades, inscripciones, participantes, historiales y etiquetas. @author Marcel Abad
     private final ActividadService actividadService;
 
-    // Servicio encargado de registrar y consultar seguimientos.
+    // Servicio de registro y consulta de seguimientos en MongoDB. @author Óscar Renilla
     private final SeguimientoService seguimientoService;
 
-    // Servicio encargado de obtener la información detallada
-    // de una actividad.
+    // Servicio del detalle completo de una actividad. @author Óscar Renilla
     private final ActividadDetalleService actividadDetalleService;
 
     /**
-     * Constructor que recibe los servicios necesarios mediante
-     * inyección de dependencias de Spring.
+     * Constructor que recibe los servicios necesarios mediante inyección de dependencias de Spring.
      *
      * @param organizacionService     servicio de organización
      * @param actividadService        servicio de actividades
@@ -59,6 +50,7 @@ public class CampusHubServiceImpl implements CampusHubService {
             ActividadService actividadService,
             SeguimientoService seguimientoService,
             ActividadDetalleService actividadDetalleService) {
+        // Guarda cada servicio recibido en su atributo.
         this.organizacionService = organizacionService;
         this.actividadService = actividadService;
         this.seguimientoService = seguimientoService;
@@ -89,7 +81,7 @@ public class CampusHubServiceImpl implements CampusHubService {
         return organizacionService.obtenerEstudiante(id);
     }
 
-    // Delega la creacion de un docente en el servicio de organizacion.
+    // Delega la creación de un docente en el servicio de organización.
     @Override
     public DocenteResponse crearDocente(CreateDocenteRequest request) {
         return organizacionService.crearDocente(request);
@@ -119,6 +111,8 @@ public class CampusHubServiceImpl implements CampusHubService {
         return actividadService.participantes(actividadId);
     }
 
+    // Versión antigua (stub de la plantilla) que lanzaba PersistenciaPendienteException; se dejó
+    // comentada porque ahora la operación está implementada en SeguimientoService.
     //  @Override
     //  public SeguimientoResponse registrarSeguimiento(
     //      Long actividadId, CreateSeguimientoRequest request) {
@@ -144,13 +138,13 @@ public class CampusHubServiceImpl implements CampusHubService {
         return actividadService.historial(estudianteId);
     }
 
-    // Guarda o actualiza la informacion de contacto de un estudiante.
+    // Guarda o actualiza la información de contacto de un estudiante.
     @Override
     public ContactoResponse guardarContacto(Long estudianteId, UpsertContactoRequest request) {
         return organizacionService.guardarContacto(estudianteId, request);
     }
 
-    // Obtiene la informacion de contacto de un estudiante.
+    // Obtiene la información de contacto de un estudiante.
     @Override
     public ContactoResponse contacto(Long estudianteId) {
         return organizacionService.contacto(estudianteId);

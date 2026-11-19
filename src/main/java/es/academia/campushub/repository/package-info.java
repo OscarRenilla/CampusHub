@@ -1,2 +1,4 @@
-/** Repositorios Spring Data JPA y MongoDB que debe implementar el alumno. */
+/**
+ * Repositorios Spring Data: JPA para PostgreSQL (entidades) y MongoDB (documentos Seguimiento).
+ */
 package es.academia.campushub.repository;
